@@ -7,10 +7,12 @@ class SocketConnection {
   streamingURL: string
   streaming: any
   text: string
+  setText: any
 
-  constructor() {
+  constructor(setText) {
     this.streamingURL = 'http://localhost:9009'
     this.streaming = new StreamingClient()
+    this.setText = setText
   }
 
   handleStart = () => {
@@ -25,6 +27,7 @@ class SocketConnection {
           function (transcript) {
             console.log('Data: ', transcript)
             _this.text = transcript
+            _this.setText(transcript)
           },
           e => {
             console.log('I got error', e)

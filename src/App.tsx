@@ -3,10 +3,11 @@ import SocketConnection from './utils/socket-connection'
 
 const App = () => {
   const [hidden, setHidden] = useState(false)
+  const [text, setText] = useState('')
   const [socketConnection, setSocketConnection] = useState(null)
 
   useEffect(() => {
-    setSocketConnection(new SocketConnection())
+    setSocketConnection(new SocketConnection(setText))
   }, [])
 
   return (
@@ -31,7 +32,7 @@ const App = () => {
           Stop
         </button>
       </div>
-      {socketConnection && <p>{socketConnection.getText()}</p>}
+      {socketConnection && <p>{text}</p>}
     </div>
   )
 }
