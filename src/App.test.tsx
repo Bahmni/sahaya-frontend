@@ -5,6 +5,6 @@ import App from './App'
 describe('Test Hello world', () => {
   it('should show the file upload box', async () => {
     render(<App />)
-    expect(await screen.findByText('Hello World !!')).toBeInTheDocument()
+    expect(await screen.findByText('Start')).toBeInTheDocument()
   })
 })
