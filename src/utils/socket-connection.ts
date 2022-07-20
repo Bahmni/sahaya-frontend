@@ -8,49 +8,36 @@ class SocketConnection {
   streaming: any
   text: string
   setText: any
+  onMessage: (message: string) => void
+  onToggle: (toggle: boolean) => void
 
-  constructor(setText) {
-    this.streamingURL = 'http://localhost:9009'
+  constructor(streamingURL, onMessage, onToggle) {
+    this.streamingURL = streamingURL
     this.streaming = new StreamingClient()
-    this.setText = setText
+    this.onMessage = onMessage
+    this.onToggle = onToggle
+  }
+
+  onConnect = action => {
+    const _this = this
+
+    if (action === SocketStatus.CONNECTED) {
+      this.onToggle(true)
+      _this.streaming.startStreaming(_this.onMessage, error => {
+        console.log('Error occurred while making streaming connection', error)
+      })
+    } else if (action === SocketStatus.TERMINATED) {
+      this.onToggle(false)
+    }
   }
 
   handleStart = () => {
     const language = 'en'
-    console.log('Connecting to server..')
-    const _this = this
-    this.streaming.connect(this.streamingURL, language, function (action, id) {
-      console.log('Connected', id, 'action:', action)
-      if (action === SocketStatus.CONNECTED) {
-        console.log('Connected, Start Speaking..')
-        _this.streaming.startStreaming(
-          function (transcript) {
-            console.log('Data: ', transcript)
-            _this.text = transcript
-            _this.setText(transcript)
-          },
-          e => {
-            console.log('I got error', e)
-          },
-        )
-      } else if (action === SocketStatus.TERMINATED) {
-        // Socket is closed and punctuation can be done here.
-        console.log('Punctuating: ', _this.text)
-
-        // _this.handlePunctuation(_this.state.text);
-      } else {
-        console.log('Unexpected action', action, id)
-      }
-    })
+    this.streaming.connect(this.streamingURL, language, this.onConnect)
   }
 
   handleStop = () => {
-    console.log('Stopping: ' + 'text')
     this.streaming.stopStreaming()
-  }
-
-  getText = () => {
-    return this.text
   }
 }
 

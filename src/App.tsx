@@ -1,13 +1,21 @@
 import React, {useEffect, useState} from 'react'
 import SocketConnection from './utils/socket-connection'
+import {streamingURL} from './constants'
 
 const App = () => {
-  const [hidden, setHidden] = useState(false)
+  const [toggle, setToggle] = useState(false)
   const [text, setText] = useState('')
   const [socketConnection, setSocketConnection] = useState(null)
 
+  const onMessage = (message: string) => {
+    setText(message)
+  }
+  const onToggle = (toggle: boolean) => {
+    setToggle(toggle)
+  }
+
   useEffect(() => {
-    setSocketConnection(new SocketConnection(setText))
+    setSocketConnection(new SocketConnection(streamingURL, onMessage, onToggle))
   }, [])
 
   return (
@@ -16,18 +24,16 @@ const App = () => {
         <button
           onClick={() => {
             socketConnection.handleStart()
-            setHidden(true)
           }}
-          hidden={hidden}
+          hidden={toggle}
         >
           Start
         </button>
         <button
           onClick={() => {
             socketConnection.handleStop()
-            setHidden(false)
           }}
-          hidden={!hidden}
+          hidden={!toggle}
         >
           Stop
         </button>
