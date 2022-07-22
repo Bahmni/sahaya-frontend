@@ -7,15 +7,21 @@ const App = () => {
   const [text, setText] = useState('')
   const [socketConnection, setSocketConnection] = useState(null)
 
-  const onMessage = (message: string) => {
+  const onIncomingMessage = (message: string) => {
     setText(message)
   }
-  const onToggle = (toggle: boolean) => {
+  const onSocketConnectionChange = (toggle: boolean) => {
     setToggle(toggle)
   }
 
   useEffect(() => {
-    setSocketConnection(new SocketConnection(streamingURL, onMessage, onToggle))
+    setSocketConnection(
+      new SocketConnection(
+        streamingURL,
+        onIncomingMessage,
+        onSocketConnectionChange,
+      ),
+    )
   }, [])
 
   return (

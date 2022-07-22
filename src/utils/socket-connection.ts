@@ -5,39 +5,43 @@ import {
 
 class SocketConnection {
   streamingURL: string
-  streaming: any
+  streamingclient: any
   text: string
   setText: any
-  onMessage: (message: string) => void
-  onToggle: (toggle: boolean) => void
+  onIncomingMessage: (message: string) => void
+  // onErrorMessage: (message: string) => void
+  onSocketConnectionChange: (toggle: boolean) => void
 
-  constructor(streamingURL, onMessage, onToggle) {
+  constructor(streamingURL, onIncomingMessage, onSocketConnectionChange) {
     this.streamingURL = streamingURL
-    this.streaming = new StreamingClient()
-    this.onMessage = onMessage
-    this.onToggle = onToggle
+    this.streamingclient = new StreamingClient()
+    this.onIncomingMessage = onIncomingMessage
+    this.onSocketConnectionChange = onSocketConnectionChange
   }
-
+  onErrorMessage = 'Error occurred while making streaming connection'
   onConnect = action => {
     const _this = this
 
     if (action === SocketStatus.CONNECTED) {
-      this.onToggle(true)
-      _this.streaming.startStreaming(_this.onMessage, error => {
-        console.log('Error occurred while making streaming connection', error)
-      })
+      _this.onSocketConnectionChange(true)
+      _this.streamingclient.startStreaming(
+        _this.onIncomingMessage,
+        this.onErrorMessage,
+      )
     } else if (action === SocketStatus.TERMINATED) {
-      this.onToggle(false)
+      _this.onSocketConnectionChange(false)
     }
   }
 
   handleStart = () => {
     const language = 'en'
-    this.streaming.connect(this.streamingURL, language, this.onConnect)
+    console.log(this.streamingclient)
+
+    this.streamingclient.connect(this.streamingURL, language, this.onConnect)
   }
 
   handleStop = () => {
-    this.streaming.stopStreaming()
+    this.streamingclient.stopStreaming()
   }
 }
 
