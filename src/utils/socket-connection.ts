@@ -9,7 +9,6 @@ class SocketConnection {
   text: string
   setText: any
   onIncomingMessage: (message: string) => void
-  // onErrorMessage: (message: string) => void
   onSocketConnectionChange: (toggle: boolean) => void
 
   constructor(streamingURL, onIncomingMessage, onSocketConnectionChange) {
@@ -35,7 +34,6 @@ class SocketConnection {
 
   handleStart = () => {
     const language = 'en'
-    console.log(this.streamingclient)
 
     this.streamingclient.connect(this.streamingURL, language, this.onConnect)
   }
