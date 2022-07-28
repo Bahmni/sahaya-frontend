@@ -31,7 +31,7 @@ const config = {
   },
   target: 'web',
   devServer: {
-    port: 3030, // you can change the port
+    port: 3030,
   },
   module: {
     rules: [
@@ -41,9 +41,12 @@ const config = {
         exclude: /node_modules/,
       },
       {
+        test: /\.css$/,
+        use: ['style-loader', cssLoader],
+      },
+      {
         test: /\.s[ac]ss$/,
         use: ['style-loader', cssLoader, 'sass-loader'],
-        exclude: /node_modules/,
       },
     ],
   },
@@ -51,11 +54,11 @@ const config = {
     new ForkTsCheckerWebpackPlugin(),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      template: 'public/index.html', // to import index.html file inside index.js
+      template: 'public/index.html',
     }),
   ],
   resolve: {
-    extensions: ['.tsx', '.ts', '.jsx', '.js', '.scss'],
+    extensions: ['.tsx', '.ts', '.jsx', '.js', '.scss', '.css'],
   },
 }
 

@@ -5,9 +5,7 @@
     "transformIgnorePatterns": ["/node_modules/"],
     "moduleNameMapper": {
       "\\.(s?css)$": "identity-obj-proxy",
-      "^@carbon/icons-react/es/(.*)$": "@carbon/icons-react/lib/$1",
-      "^@carbon/charts": "identity-obj-proxy",
-      "^carbon-components-react/es/(.*)$": "carbon-components-react/lib/$1",
+      "^@carbon/react/es/(.*)$": "@carbon/react/lib/$1",
       "^lodash-es/(.*)$": "lodash/$1"
     },
     "collectCoverageFrom": [

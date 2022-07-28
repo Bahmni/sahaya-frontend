@@ -19,5 +19,6 @@
 
     // for CatchBoundaries
     "@typescript-eslint/no-throw-literal": "off"
+
   }
 }

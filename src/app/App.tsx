@@ -1,5 +1,5 @@
-import {ConsultationPad} from '../consultation-pad/consultation-pad.component'
-import {FloatingConsultationButton} from '../floating-consultation-button/floating-consultation-button.component'
+import {ConsultationPad} from '../components/consultation-pad/consultation-pad'
+import {FloatingConsultationButton} from '../components/floating-consultation-button/floating-consultation-button.component'
 import React, {useState} from 'react'
 
 const App = () => {
