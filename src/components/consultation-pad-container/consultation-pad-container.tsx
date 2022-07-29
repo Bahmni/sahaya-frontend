@@ -1,22 +1,44 @@
 import {Button, TextArea} from '@carbon/react'
-import React, {useRef, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {MicrophoneFilled, StopFilled} from '@carbon/icons-react'
 import styles from './consultation-pad-container.scss'
+import SocketConnection from '../../utils/socket-connection'
+import {streamingURL} from '../../constants'
 
 export const ConsultationPadContainer = () => {
-  const textAreaRef = useRef(null)
-  const [showMicroPhoneIcon, setShowMicroPhoneIcon] = useState(true)
+  const [isRecording, setIsRecording] = useState(true)
   const [disableSaveButton, setDisableSaveButton] = useState(true)
-  const startRecording = () => {
-    setShowMicroPhoneIcon(!showMicroPhoneIcon)
-    textAreaRef.current.focus()
+  const [text, setText] = useState('')
+  const [socketConnection, setSocketConnection] = useState(null)
+
+  const onIncomingMessage = (message: string) => {
+    setText(message)
   }
-  const stopMic = () => {
+  const onSocketConnectionChange = (isRecording: boolean) => {
+    setIsRecording(!isRecording)
+  }
+
+  useEffect(() => {
+    setSocketConnection(
+      new SocketConnection(
+        streamingURL,
+        onIncomingMessage,
+        onSocketConnectionChange,
+      ),
+    )
+  }, [])
+  // const startRecording = () => {
+  //   setIsRecording(!isRecording)
+  //   textAreaRef.current.focus()
+  // }
+  const renderStopMic = () => {
     return (
       <>
         <StopFilled
           className={styles.stopIcon}
-          onClick={startRecording}
+          onClick={() => {
+            socketConnection.handleStop()
+          }}
           aria-label="Stop Mic"
         />
         <h6> Listening...</h6>
@@ -24,12 +46,14 @@ export const ConsultationPadContainer = () => {
     )
   }
 
-  const startMic = () => {
+  const renderStartMic = () => {
     return (
       <>
         <MicrophoneFilled
           className={styles.microphoneIcon}
-          onClick={startRecording}
+          onClick={() => {
+            socketConnection.handleStart()
+          }}
           aria-label="Start Mic"
         />
         <h6>Start recording</h6>
@@ -37,7 +61,7 @@ export const ConsultationPadContainer = () => {
     )
   }
 
-  const consultationNotesTextArea = () => {
+  const renderTextArea = () => {
     return (
       <TextArea
         onChange={e => {
@@ -46,15 +70,16 @@ export const ConsultationPadContainer = () => {
             : setDisableSaveButton(true)
         }}
         labelText=""
-        ref={textAreaRef}
+        ref={input => input && input.focus()}
+        value={text}
       ></TextArea>
     )
   }
   return (
     <>
-      {consultationNotesTextArea()}
-      <div className={styles.footer}>
-        {showMicroPhoneIcon ? startMic() : stopMic()}
+      {renderTextArea()}
+      <div className={styles.padBottomArea}>
+        {isRecording ? renderStartMic() : renderStopMic()}
         <Button className={styles.saveButton} disabled={disableSaveButton}>
           Save
         </Button>

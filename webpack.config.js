@@ -37,7 +37,7 @@ const config = {
     rules: [
       {
         use: 'swc-loader',
-        test: /\.tsx$/,
+        test: /\.ts|tsx$/,
         exclude: /node_modules/,
       },
       {

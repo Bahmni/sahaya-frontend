@@ -53,7 +53,6 @@
     "jest": "^28.1.2",
     "jest-axe": "^6.0.0",
     "jest-cli": "^28.1.2",
-    "jest-environment-jsdom": "^28.1.2",
     "jest-watch-typeahead": "^1.1.0",
     "jest-when": "^3.5.1",
     "prettier": "^2.7.1",
@@ -70,6 +69,8 @@
     "webpack": "^5.73.0",
     "webpack-bundle-analyzer": "^4.5.0",
     "webpack-cli": "^4.10.0",
-    "webpack-dev-server": "^4.9.3"
+    "webpack-dev-server": "^4.9.3",
+    "jest-environment-jsdom": "^28.1.2",
+    "@project-sunbird/open-speech-streaming-client": "^1.0.10"
   }
 }
