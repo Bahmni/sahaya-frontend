@@ -71,6 +71,7 @@ describe('Speech Assistant App', () => {
     user.click(screen.getByLabelText('Start Mic'))
     await waitFor(() => {
       expect(screen.getByRole('textbox')).toHaveFocus()
+      expect(screen.getByLabelText('Stop Mic'))
     })
     user.click(screen.getByLabelText('Stop Mic'))
     await waitFor(() => {

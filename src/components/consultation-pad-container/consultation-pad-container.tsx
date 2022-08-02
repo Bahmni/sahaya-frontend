@@ -6,8 +6,7 @@ import SocketConnection from '../../utils/socket-connection'
 import {streamingURL} from '../../constants'
 
 export const ConsultationPadContainer = () => {
-  const [isRecording, setIsRecording] = useState(true)
-  const [disableSaveButton, setDisableSaveButton] = useState(true)
+  const [isRecording, setIsRecording] = useState(false)
   const [text, setText] = useState('')
   const [socketConnection, setSocketConnection] = useState(null)
 
@@ -15,7 +14,7 @@ export const ConsultationPadContainer = () => {
     setText(message)
   }
   const onSocketConnectionChange = (isRecording: boolean) => {
-    setIsRecording(!isRecording)
+    setIsRecording(isRecording)
   }
 
   useEffect(() => {
@@ -27,10 +26,7 @@ export const ConsultationPadContainer = () => {
       ),
     )
   }, [])
-  // const startRecording = () => {
-  //   setIsRecording(!isRecording)
-  //   textAreaRef.current.focus()
-  // }
+
   const renderStopMic = () => {
     return (
       <>
@@ -64,10 +60,8 @@ export const ConsultationPadContainer = () => {
   const renderTextArea = () => {
     return (
       <TextArea
-        onChange={e => {
-          e.target.value.length > 0
-            ? setDisableSaveButton(false)
-            : setDisableSaveButton(true)
+        onChange={event => {
+          setText(event.target.value)
         }}
         labelText=""
         ref={input => input && input.focus()}
@@ -79,8 +73,11 @@ export const ConsultationPadContainer = () => {
     <>
       {renderTextArea()}
       <div className={styles.padBottomArea}>
-        {isRecording ? renderStartMic() : renderStopMic()}
-        <Button className={styles.saveButton} disabled={disableSaveButton}>
+        {isRecording ? renderStopMic() : renderStartMic()}
+        <Button
+          className={styles.saveButton}
+          disabled={text == '' ? true : false}
+        >
           Save
         </Button>
       </div>
